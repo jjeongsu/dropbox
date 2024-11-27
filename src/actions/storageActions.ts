@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
+import { createServer } from 'http';
 
 function handleError(error) {
   if (error) {
@@ -29,5 +30,16 @@ export async function searchFiles(search: string = '') {
 
   handleError(error);
 
+  return data;
+}
+
+export async function deleteFile(fileName: string) {
+  const supabase = await createServerSupabaseClient();
+
+  const { data, error } = await supabase.storage
+    .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
+    .remove([fileName]); // path의 list를 받는다.
+
+  handleError(error);
   return data;
 }
