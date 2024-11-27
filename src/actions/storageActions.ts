@@ -24,7 +24,7 @@ export async function uploadFile(formData: FormData) {
 export async function searchFiles(search: string = '') {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.storage
-    .from(process.env.NEXT_PCLIG_STORAGE_BUCKET)
+    .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
     .list(null, { search }); // path, options, parameter
 
   handleError(error);

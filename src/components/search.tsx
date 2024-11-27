@@ -3,8 +3,7 @@
 import { Input } from '@material-tailwind/react';
 import { useState } from 'react';
 
-export default function Search() {
-  const [searchInput, setSearchInput] = useState('');
+export default function Search({ searchInput, setSearchInput }) {
   return (
     <Input
       label="Search Todo"
