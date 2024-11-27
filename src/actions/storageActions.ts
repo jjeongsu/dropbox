@@ -1,7 +1,6 @@
 'use server';
 
 import { createServerSupabaseClient } from '@/utils/supabase/server';
-import { createServer } from 'http';
 
 function handleError(error) {
   if (error) {
@@ -11,15 +10,17 @@ function handleError(error) {
 }
 
 export async function uploadFile(formData: FormData) {
-  const file = formData.get('file') as File;
+  const files = Array.from(formData.entries()).map(([_, file]) => file as File);
   const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase.storage
-    .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
-    .upload(file.name, file, { upsert: true }); // path, fileBody, fileOptions. * upsert : filename으로 파일이 있으면 업데이트, 없으면 insert
 
-  handleError(error);
-
-  return data;
+  const result = await Promise.all(
+    files.map((file) => {
+      supabase.storage
+        .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
+        .upload(file.name, file, { upsert: true });
+    }),
+  );
+  return result;
 }
 
 export async function searchFiles(search: string = '') {

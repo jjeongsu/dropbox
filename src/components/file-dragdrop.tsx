@@ -19,11 +19,12 @@ export default function FileDragDrop() {
 
   // note : react-dragzone 관련 설정
   const onDrop = useCallback(async (acceptedFiles) => {
-    const file = acceptedFiles?.[0];
-    // 정상적으로 파일이 올라왔다면
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
+    const formData = new FormData();
+    if (acceptedFiles.length > 0) {
+      acceptedFiles.forEach((file) => {
+        formData.append(file.name, file);
+      });
+
       await uploadImageMutation.mutate(formData);
     }
   }, []);
