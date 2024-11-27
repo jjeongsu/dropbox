@@ -14,11 +14,11 @@ export async function uploadFile(formData: FormData) {
   const supabase = await createServerSupabaseClient();
 
   const result = await Promise.all(
-    files.map((file) => {
+    files.map((file) =>
       supabase.storage
         .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
-        .upload(file.name, file, { upsert: true });
-    }),
+        .upload(file.name, file, { upsert: true }),
+    ),
   );
   return result;
 }
